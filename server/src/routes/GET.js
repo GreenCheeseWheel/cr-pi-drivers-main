@@ -1,11 +1,29 @@
 const getRouter = require("express").Router();
+const {getAllDrivers, getDriverById, getTeams} = require('../controllers/getControllers');
 
 
+getRouter.get('/drivers', (req, res) => {
+    
+    getAllDrivers()
+        .then(data => res.status(200).json(data))
+        .catch(error => res.status(500).json({error: error.message}));
+    
+});
 
-getRouter.get('', (req, res) => {
+getRouter.get('/drivers/:idDriver', (req, res) => {
+    const {idDriver} = req.params;
+    
+    getDriverById(idDriver)
+        .then(driver => res.status(200).json({driver}))
+        .catch(err => res.status(500).json({error: err.message}));
 
 
 });
 
+getRouter.get('/teams', (req, res) => {
+    getTeams()
+        .then(teams => res.status(200).json(teams))
+        .catch(err => res.status(500).json({error: err.message}));
+});
 
 module.exports = getRouter;

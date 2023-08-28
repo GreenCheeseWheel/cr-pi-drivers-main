@@ -6,22 +6,22 @@ module.exports = (sequelize) => {
   sequelize.define('Driver', {
     id: {
       type: DataTypes.INTEGER,
+      primaryKey: true,
       autoIncrement: true,
       allowNull: false,
     },
     name: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      type: DataTypes.TEXT,
     },
     surname: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      type: DataTypes.TEXT,
     },
+    
     description: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
     },
     image: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT, 
     },
     nationality: {
       type: DataTypes.STRING
