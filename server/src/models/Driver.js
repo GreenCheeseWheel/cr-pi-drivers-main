@@ -12,6 +12,7 @@ module.exports = (sequelize) => {
     },
     name: {
       type: DataTypes.TEXT,
+      unique: true,
     },
     surname: {
       type: DataTypes.TEXT,

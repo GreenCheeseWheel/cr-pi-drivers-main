@@ -12,7 +12,13 @@ export default function Nav()
     const [search, setSearch] = React.useState('');
 
     const handleSearch = () => {
-        const update = drivers.filter(driver => driver.name.includes(search) || driver.surname.includes(search))
+        const update = drivers.filter(driver => {
+            const inFullName = `${driver.name} ${driver.surname}`.indexOf(search) > -1;
+
+            return inFullName;
+        })
+
+        console.log(update);
         dispatch(updateSuggested(update));
     }
 
@@ -27,7 +33,7 @@ export default function Nav()
 
     return(
         <ul>
-            <li><Link to={'/home'}>Home</Link></li>
+            <li><Link to='/home'>Home</Link></li>
             {
                 pathname === '/home' && (
                     <li>
@@ -40,6 +46,7 @@ export default function Nav()
                     </li>
                 ) 
             }
+            <li><Link to='/create'>Create Driver</Link></li>
         </ul>
     )
 }

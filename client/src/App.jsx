@@ -7,6 +7,7 @@ import {Routes, Route, useParams} from "react-router-dom"
 import Nav from './components/Nav/Nav'
 import Home from './components/Home/Home'
 import DriverDetail from './components/DriverDetail/DriverDetail'
+import Form from './components/Form/Form'
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
       <Route path='/' element={<Landing />} />
       <Route path='/home' element={<Home />} />
       <Route path='/driver/:name' element={<DriverDetail />} />
+      <Route path='/create' element={<Form />} />
     </Routes>
     </>
   )

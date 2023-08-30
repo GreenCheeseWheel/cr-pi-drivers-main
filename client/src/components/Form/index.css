@@ -1,0 +1,12 @@
+form {
+    width: 33%;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+.form-section {
+    display: flex;
+    flex-direction: column;
+
+}
