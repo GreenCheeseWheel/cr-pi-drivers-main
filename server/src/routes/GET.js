@@ -13,7 +13,7 @@ getRouter.get('/drivers', (req, res) => {
 getRouter.get('/drivers/name', (req, res) => {
     const {name} = req.query;
 
-    getDriverByName(name).then(resp => console.log(resp));
+    getDriverByName(name).then(driver => res.status(200).json(driver));
 
 });
 

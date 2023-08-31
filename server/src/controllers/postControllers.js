@@ -13,17 +13,25 @@ async function postDriver(name, surname, description, image, nationality, birth,
             origin: 'db'
         });
         
-        const teams_arr = teams.split(',').map(team => {name: team});
+        const teams_arr = teams.split(',').map(team => new Object({name: team.trim()}));
+        const teams_resp = [];
 
-        const teams_ids = await Teams.findAll({
-            where: {
-                [Op.or]: teams_arr
-            }
-        })
-
-        for(let i = 0; i < teams_ids.length; i++)
+        for(const team of teams_arr)
         {
-            await drivers_x_teams.create({DriverId: driver.id, TeamId: teams_ids[i].id });
+            const [teamFromDb, created] = await Teams.findOrCreate({
+                where: {
+                    name: team.name
+                }
+            });
+            
+            teams_resp.push(teamFromDb);
+        }
+
+
+        
+        for(let i = 0; i < teams_resp.length; i++)
+        {
+            await drivers_x_teams.create({DriverId: driver.id, TeamId: teams_resp[i].id });
         }
         return;
     }

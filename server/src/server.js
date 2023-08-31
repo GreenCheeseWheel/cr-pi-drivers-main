@@ -4,7 +4,6 @@ const postRouter = require("./routes/POST");
 
 const morgan = require("morgan");
 const cors = require("cors");
-
 const server = express();
 
 server.use(morgan("dev"));
@@ -13,5 +12,6 @@ server.use(cors());
 
 server.use(getRouter);
 server.use(postRouter)
+
 
 module.exports = server;

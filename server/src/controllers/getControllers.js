@@ -5,9 +5,7 @@ const {Op} = require('sequelize');
 async function getAllDrivers()
 {
     try
-    {
-
-        
+    {   
         const drivers_arr = await Driver.findAll();
 
         
@@ -62,9 +60,16 @@ async function getDriverByName(name)
 {
     try
     {
-        let drivers = await getAllDrivers();
-        name = name.toLowerCase();
-        return drivers.filter(driver => (driver.name).toLowerCase().includes(name));
+        let driver = await Driver.findOne({
+            where: {
+                name: {
+                    [Op.iLike]: name,
+                }
+            },
+            include: Teams,
+        });
+        
+        return driver;
     }
     catch(error)
     {
