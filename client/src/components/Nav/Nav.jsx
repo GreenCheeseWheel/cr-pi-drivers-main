@@ -13,12 +13,11 @@ export default function Nav()
 
     const handleSearch = () => {
         const update = drivers.filter(driver => {
-            const inFullName = `${driver.name} ${driver.surname}`.indexOf(search) > -1;
+            const inFullName = `${(driver.name).toLowerCase()} ${(driver.surname).toLowerCase()}`.indexOf(search.toLowerCase()) > -1;
 
             return inFullName;
         })
 
-        console.log(update);
         dispatch(updateSuggested(update));
     }
 

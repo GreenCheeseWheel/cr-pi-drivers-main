@@ -1,6 +1,4 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import React from 'react'
 import './App.css'
 import Landing from './components/Landing/Landing'
 import {Routes, Route, useParams} from "react-router-dom"
@@ -9,7 +7,16 @@ import Home from './components/Home/Home'
 import DriverDetail from './components/DriverDetail/DriverDetail'
 import Form from './components/Form/Form'
 
+import { getAllDrivers } from './redux/actions'
+import { useDispatch } from 'react-redux'
+
 function App() {
+
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    dispatch(getAllDrivers());
+  }, []);
 
   return (
     <>

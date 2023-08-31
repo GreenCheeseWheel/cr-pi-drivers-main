@@ -9,7 +9,8 @@ async function postDriver(name, surname, description, image, nationality, birth,
             surname, 
             description, 
             image: image ? image : "https://es.wikipedia.org/wiki/Temporada_2022_de_F%C3%B3rmula_1#/media/Archivo:2022_Formula_One_car_at_the_2021_British_Grand_Prix_(51350002179).jpg", 
-            nationality, birth
+            nationality, birth,
+            origin: 'db'
         });
         
         const teams_arr = teams.split(',').map(team => {name: team});

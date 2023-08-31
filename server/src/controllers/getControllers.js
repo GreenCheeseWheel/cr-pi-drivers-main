@@ -1,5 +1,6 @@
 const {Driver, Teams} = require('../db');
 const axios = require('axios');
+const {Op} = require('sequelize');
 
 async function getAllDrivers()
 {
@@ -57,6 +58,21 @@ async function getDriverById(id)
     }
 }
 
+async function getDriverByName(name)
+{
+    try
+    {
+        let drivers = await getAllDrivers();
+        name = name.toLowerCase();
+        return drivers.filter(driver => (driver.name).toLowerCase().includes(name));
+    }
+    catch(error)
+    {
+        throw new Error(error.message);
+    }
+
+}
+
 async function getTeams()
 {
 
@@ -98,5 +114,6 @@ async function getTeams()
 module.exports = {
     getAllDrivers,
     getDriverById,
+    getDriverByName,
     getTeams
 };
