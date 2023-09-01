@@ -3,6 +3,7 @@ const app = require('../src/server');
 const {agent} = require('supertest');
 const server = agent(app); 
 
+let driverId = 1;
 
 describe('Get all drivers', () => {
 
@@ -21,7 +22,7 @@ describe('Get all drivers', () => {
             nationality: 'South Africa',
             description: 'Un corredor imaginario',
             image: 'https://www.unaimage.com/1',
-            birth: '11/14/1994',
+            birth: '1994-11-14',
             teams: 'Mercedes, BMW',
         }
 
@@ -49,9 +50,32 @@ describe('Get all drivers', () => {
         const mercedes = driverJohan["Teams"][0].name;
         const bmw = driverJohan["Teams"][1].name; 
 
-        console.log('Mercedes es: ' + mercedes);
-        expect({...driverJohan, id: 0, Teams: `${mercedes}, ${bmw}`} ).toEqual({...driver, id: 0});
+        driverId = driverJohan.id;
+        expect({...driverJohan, Teams: `${mercedes}, ${bmw}`} ).toEqual({...driver, id: driverId});
     });
 
 
 })
+
+describe('Get driver by id', () => {
+    it('Should get the correct driver from the database',async () => {
+        const driver = {
+            name: 'Johan',
+            surname: 'nesburgo',
+            nationality: 'South Africa',
+            description: 'Un corredor imaginario',
+            image: 'https://www.unaimage.com/1',
+            birth: '1994-11-14',
+            Teams: 'Mercedes, BMW',
+        };
+
+        const driverRes = (await server.get('/drivers/' + driverId)).body;
+        expect(driverRes.name).toBe(driver.name);
+
+    });
+
+    it("Should retrieve a driver from the api if id is not in database",async () => {
+        const driverRes = (await server.get('/drivers/' + (driverId+1) )).body;
+        expect(driverRes.image).not.toBe('https://www.unaimagen.com/1');
+    });
+});

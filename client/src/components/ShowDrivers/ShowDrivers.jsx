@@ -3,6 +3,7 @@ import DriverCard from "../DriverCard/DriverCard";
 import {useDispatch, useSelector} from 'react-redux'
 import { getAllDrivers, updateSuggested } from "../../redux/actions";
 import { filterByOrderType, filterByOrigin, filterByTeams } from "./filters";
+import './index.css'
 
 export const types = {
     origin_db: 'DB',
@@ -14,7 +15,7 @@ export const types = {
 };
 
 
-// I need to get the teams from the Home component
+// I SHOULD GET THE useRedux HOOK HERE BECAUSE STATE GOT TOO COMPLICATED
 export default function ShowDrivers({page, setPage, teams})
 {
     const allDrivers = useSelector(state => state.drivers);
@@ -140,7 +141,8 @@ export default function ShowDrivers({page, setPage, teams})
                     )
                 }
             </div>
-        
+                
+            <div id="driver-display">
             {
                 drivers.length && drivers.map((driver, index) =>  {
 
@@ -156,6 +158,7 @@ export default function ShowDrivers({page, setPage, teams})
                     }
                 })
             }
+            </div>
 
             <button onClick={handlePreviousPage} disabled={page == 1 ? true : false} >Previous</button>
             <button onClick={handleNextPage} disabled={page >= drivers.length / numDrivers ? true : false} >Next</button>

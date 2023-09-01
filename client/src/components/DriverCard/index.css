@@ -1,0 +1,38 @@
+#driver-card {  
+    display: grid;
+    grid-template-rows: 1fr 2fr 1fr;
+    grid-template-columns: 1fr;
+    text-align: center;
+
+    border: 1px solid white;  
+    width: 33%;
+    height: 300px;
+    border-radius: 7px; 
+}
+
+#driver-name{
+    color: rgba(255, 255, 255, 0.9);
+    margin: auto;
+    width: fit-content;
+    font-size: large;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#driver-image-container {
+    margin: auto;
+    height: 150px;
+    max-width: 50%;
+    box-sizing: border-box;
+}
+
+#driver-image {
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: bolder;
+    height: 100%;
+    max-width: 100%;
+}
+
+#driver-teams{
+    color: rgba(255, 255, 255, 0.9);
+}

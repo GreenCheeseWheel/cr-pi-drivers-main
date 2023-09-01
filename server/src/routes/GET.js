@@ -21,7 +21,7 @@ getRouter.get('/drivers/:idDriver', (req, res) => {
     const {idDriver} = req.params;
     
     getDriverById(idDriver)
-        .then(driver => res.status(200).json({driver}))
+        .then(driver => res.status(200).json(driver))
         .catch(err => res.status(500).json({error: err.message}));
 
 

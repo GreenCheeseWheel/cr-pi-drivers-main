@@ -2,6 +2,9 @@ import { Link, useLocation } from "react-router-dom"
 import React from "react";
 import {useDispatch, useSelector} from "react-redux"
 import { updateSuggested } from "../../redux/actions";
+import F1Logo from '../../assets/F1.svg'
+import './index.css'
+
 
 export default function Nav()
 {
@@ -31,21 +34,27 @@ export default function Nav()
     // hold every suggested driver to display
 
     return(
-        <ul>
-            <li><Link to='/home'>Home</Link></li>
-            {
-                pathname === '/home' && (
-                    <li>
-                        <input 
-                            type="text" 
-                            value={search} 
-                            onChange={(ev) => setSearch(ev.target.value)} 
-                            placeholder="Search driver"
-                            />
-                    </li>
-                ) 
-            }
-            <li><Link to='/create'>Create Driver</Link></li>
-        </ul>
+        <>
+            <nav id="navbar">
+                <ul id="navbar-contents">
+                    <li className="navbar-link"><Link to='/'><img src={F1Logo}></img></Link></li>
+                    <li className="navbar-link"><Link to='/home'>Home</Link></li>
+                    { 
+                        pathname === '/home' && (
+                            <li id="navbar-searchbar">
+                                <input 
+                                    type="text" 
+                                    value={search} 
+                                    onChange={(ev) => setSearch(ev.target.value)} 
+                                    placeholder="Search driver"
+                                    />
+                            </li>
+                        ) 
+                    }
+                    <li className="navbar-link"><Link to='/create'>Create Driver</Link></li>
+                </ul>
+            </nav>
+            <div></div>
+        </>
     )
 }

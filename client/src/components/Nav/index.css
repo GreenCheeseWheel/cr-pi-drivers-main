@@ -1,0 +1,46 @@
+#navbar {
+    width: 100%;
+    background-color: #e10600;
+    height: 59px;
+    position: sticky;
+    top: 0;
+}
+
+#navbar-contents {
+    width: 80%;
+    height: 100%;
+
+    gap: 5px;
+
+    margin: 0;
+    padding: 0;
+    border: 0;
+
+    list-style-type: none;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#navbar-searchbar {
+    width: 30%;
+}
+
+#navbar-searchbar > input {
+    height: 24px;
+    width: 100%;
+    border-radius: 12px;
+    text-indent: 12px;
+    border: 0;
+    outline: none;
+    font-size: small;
+    
+
+}
+
+.navbar-link > *{
+    color: snow;
+}
