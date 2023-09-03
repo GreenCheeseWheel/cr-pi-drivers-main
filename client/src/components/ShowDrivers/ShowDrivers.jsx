@@ -19,7 +19,10 @@ export const types = {
 export default function ShowDrivers({page, setPage, teams})
 {
     const allDrivers = useSelector(state => state.drivers);
-    const drivers = useSelector(state => state.suggested);
+    const drivers = useSelector(state => {
+    
+        return state.suggested
+    });
     const dispatch = useDispatch();
     const numDrivers = 9;
 
@@ -153,7 +156,7 @@ export default function ShowDrivers({page, setPage, teams})
                                     id={driver.id} 
                                     name={`${driver.name} ${driver.surname}`} 
                                     image={driver.image} 
-                                    teams={driver.teams} 
+                                    teams={driver.teams ? driver.teams : driver["Teams"]} 
                                     />
                     }
                 })

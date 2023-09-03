@@ -6,10 +6,9 @@ async function getAllDrivers()
 {
     try
     {   
-        const drivers_arr = await Driver.findAll();
+        const drivers_arr = await Driver.findAll({include: Teams});
 
-        
-        
+
         const drivers_arr_api = await axios.get('http://localhost:5000/drivers').then(res => res.data ).catch(error => {return {error: error.message}});
         
         for(const driver of drivers_arr_api)

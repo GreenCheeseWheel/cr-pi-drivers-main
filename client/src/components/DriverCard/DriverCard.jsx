@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import './index.css'
+import React from "react";
 
 export default function DriverCard({id, name,image, teams})
 {
@@ -11,7 +12,13 @@ export default function DriverCard({id, name,image, teams})
             <div id="driver-image-container">
                 <img id="driver-image" src={image} title={name} alt="image-not-found"></img>
             </div>
-            <p id="driver-teams">{teams}</p>        
+
+            {
+                Array.isArray(teams) ?
+                <p id="driver-teams">{teams.map(team => team.name).join(', ')}</p>
+                :
+                <p id="driver-teams">{teams}</p>
+            }        
         </div>
     )
 }

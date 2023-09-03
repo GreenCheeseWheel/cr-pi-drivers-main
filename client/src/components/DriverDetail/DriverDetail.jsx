@@ -20,7 +20,7 @@ export default function DriverDetail()
         driver && (
         <div>
             <p>{driver.id}</p>
-            <p>{driver.teams}</p>
+            <p>{driver.teams ? driver.teams : driver["Teams"].map(team => team.name).join(', ') }</p>
             <p>{driver.name} {driver.surname}</p>
             <p>{driver.birth}</p>
             <p>{driver.nationality}</p>

@@ -28,6 +28,9 @@ module.exports = (sequelize) => {
     },
     birth: {
       type: DataTypes.DATEONLY,
+    },
+    origin: {
+      type: DataTypes.STRING,
     }
 
   }, {

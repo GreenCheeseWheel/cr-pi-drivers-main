@@ -8,10 +8,10 @@ function filterByOrigin(origin, drivers)
         switch(origin)
         {
             case types.origin_db:
-                return drivers.filter(driver => driver.origin != null);
+                return drivers.filter(driver => driver.origin);
 
             case types.origin_api:
-                return drivers.filter(driver => driver.origin == null);
+                return drivers.filter(driver => !driver.origin);
         }
 
     }
@@ -24,9 +24,27 @@ function filterByTeams(teamsArr, drivers)
     
     const filteredDrivers = drivers.filter(driver => {
         
-        if(driver.teams != null)
+        if(driver.teams)
         {    
             const driverTeams = driver.teams.split(',').map(teamName => teamName.trim());
+
+            for(let i = 0; i < teamsArr.length; i++)
+            {
+
+                if(!driverTeams.includes(teamsArr[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        console.log("Deberia ser fangio: " + driver["Teams"]);
+
+        if(Array.isArray(driver["Teams"]))
+        {
+            const driverTeams = driver["Teams"].map(team => team.name.trim());
 
             for(let i = 0; i < teamsArr.length; i++)
             {
