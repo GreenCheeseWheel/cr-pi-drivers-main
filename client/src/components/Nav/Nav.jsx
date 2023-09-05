@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom"
 import React from "react";
 import {useDispatch, useSelector} from "react-redux"
-import { updateSuggested } from "../../redux/actions";
+import { updateSearch, updateSuggested } from "../../redux/actions";
 import F1Logo from '../../assets/F1.svg'
 import './index.css'
 
@@ -15,13 +15,14 @@ export default function Nav()
     const [search, setSearch] = React.useState('');
 
     const handleSearch = () => {
-        const update = drivers.filter(driver => {
-            const inFullName = `${(driver.name).toLowerCase()} ${(driver.surname).toLowerCase()}`.indexOf(search.toLowerCase()) > -1;
+        //const update = drivers.filter(driver => {
+        //    const inFullName = `${(driver.name).toLowerCase()} ${(driver.surname).toLowerCase()}`.indexOf(search.toLowerCase()) > -1;
+        //
+        //    return inFullName;
+        //})
 
-            return inFullName;
-        })
-
-        dispatch(updateSuggested(update));
+        dispatch(updateSearch(search));
+        //dispatch(updateSuggested(update));
     }
 
     React.useEffect(() => {
@@ -35,10 +36,10 @@ export default function Nav()
 
     return(
         <>
-            <nav id="navbar">
+            <nav title="navbar" id="navbar">
                 <ul id="navbar-contents">
-                    <li className="navbar-link"><Link to='/'><img src={F1Logo}></img></Link></li>
-                    <li className="navbar-link"><Link to='/home'>Home</Link></li>
+                    <li className="navbar-link"><Link reloadDocument to='/'><img src={F1Logo}></img></Link></li>
+                    <li className="navbar-link"><Link reloadDocument to='/home'>Home</Link></li>
                     { 
                         pathname === '/home' && (
                             <li id="navbar-searchbar">

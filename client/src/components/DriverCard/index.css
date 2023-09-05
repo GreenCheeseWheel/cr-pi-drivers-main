@@ -1,27 +1,51 @@
-#driver-card {  
-    display: grid;
-    grid-template-rows: 1fr 2fr 1fr;
+#driver-card-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+
+    height: 300px;
+    width: 30%;
+    
+}
+
+/*
+grid-template-rows: 1fr 2fr 1fr;
     grid-template-columns: 1fr;
+*/
+
+#driver-card {  
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
     text-align: center;
 
-    border: 1px solid white;  
-    width: 33%;
-    height: 300px;
-    border-radius: 7px; 
+    border-right: 1px solid white;
+    border-top: 1px solid white;
+    border-top-right-radius : 7px;
+
+    cursor: pointer;
+
+    width: 100%;
+    height: 250px;
+    transition: 250ms; 
+}
+
+#driver-card:hover {
+    height: 275px;
 }
 
 #driver-name{
     color: rgba(255, 255, 255, 0.9);
-    margin: auto;
+    margin-bottom: 15px;
     width: fit-content;
     font-size: large;
     text-decoration: underline;
-    cursor: pointer;
 }
 
 #driver-image-container {
-    margin: auto;
-    height: 150px;
+    margin-top: 0;
+    height: 125px;
     max-width: 50%;
     box-sizing: border-box;
 }
@@ -35,4 +59,5 @@
 
 #driver-teams{
     color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 0;
 }

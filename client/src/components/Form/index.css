@@ -3,10 +3,26 @@ form {
     display: grid;
     grid-template-columns: 1fr;
     gap: 10px;
+    margin: auto;
+    padding-top: 1rem;
 }
 
 .form-section {
     display: flex;
     flex-direction: column;
 
+}
+
+.text-input {
+    outline: none;
+    border: 0;
+    box-sizing: border-box;
+    margin-top: 0.5rem;
+    margin-bottom: 0.3rem;
+}
+
+.send-input {
+    background-color: #EE0000;
+    border: 0;
+    
 }

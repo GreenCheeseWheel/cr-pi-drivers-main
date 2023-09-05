@@ -1,3 +1,8 @@
+import axios from "axios"
+import store from "../../redux/store"
+import { GET_ALL_TEAMS } from "../../redux/types";
+import { getTeams } from "../../redux/actions";
+
 function validateName(name)
 {
 
@@ -27,6 +32,22 @@ function validateDescription(description)
 
 function validateTeams(teams)
 {
+    let isValid = !(teams.length == 0 || /[`!@#$%^&*()_\-+=\[\]{};:'"\\|.<>\/?~]/.test(teams));
+    if(!isValid) return false;
+
+   
+    let teamsArr = teams.split(',').map(teamName => teamName.trim());
+
+    
+    let validTeams = store.getState().teams.map(team => team.name);
+    
+    for(let i = 0; i < teamsArr.length; i++)
+    {
+        if(!validTeams.includes(teamsArr[i])) return false;
+    }
+    
+
+
     return true;
 }
 
@@ -66,7 +87,7 @@ function validateAll(setDriver, setIsPermited, val, type)
 
         case 'teams':
             setDriver(prev => new Object({...prev, teams: val}));
-            setIsPermited(prev => new Object({...prev, teams: true}));
+            setIsPermited(prev => new Object({...prev, teams: validateTeams(val)}));
             break;
 
     }

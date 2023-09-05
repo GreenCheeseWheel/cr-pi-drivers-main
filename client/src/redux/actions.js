@@ -1,4 +1,5 @@
-import { GET_ALL, GET_ALL_TEAMS, UPDATE_SUGGESTED } from "./types";
+import axios from "axios";
+import { GET_ALL, GET_ALL_TEAMS, GET_BY_NAME, UPDATE_SUGGESTED } from "./types";
 
 function getAllDrivers()
 {
@@ -17,10 +18,15 @@ function getAllDrivers()
 
 function getTeams(teams)
 {
-    return (dispatch) => fetch('http://localhost:3001/teams')
-        .then(resp => resp.json())
+    return (dispatch) => axios('http://localhost:3001/teams')
+        .then(resp => resp.data)
         .then(teams => dispatch({type: GET_ALL_TEAMS, payload: teams}))
         .catch(error => dispatch({type: GET_ALL_TEAMS, payload: []}))
+}
+
+function updateSearch(name)
+{
+    return {type: GET_BY_NAME, payload: name};
 }
 
 function updateSuggested(suggested)
@@ -30,4 +36,4 @@ function updateSuggested(suggested)
 
 
 
-export {getAllDrivers, getTeams, updateSuggested}
+export {getAllDrivers, getTeams, updateSearch, updateSuggested}

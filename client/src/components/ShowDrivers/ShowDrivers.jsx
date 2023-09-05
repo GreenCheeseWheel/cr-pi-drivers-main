@@ -2,10 +2,11 @@ import React from "react"
 import DriverCard from "../DriverCard/DriverCard";
 import {useDispatch, useSelector} from 'react-redux'
 import { getAllDrivers, updateSuggested } from "../../redux/actions";
-import { filterByOrderType, filterByOrigin, filterByTeams } from "./filters";
+import { filterByName, filterByOrderType, filterByOrigin, filterByTeams } from "./filters";
 import './index.css'
 
 export const types = {
+    origin_any: 'ANY',
     origin_db: 'DB',
     origin_api: 'API',
     asc_birthday: 'Asc. by birthday',
@@ -19,29 +20,33 @@ export const types = {
 export default function ShowDrivers({page, setPage, teams})
 {
     const allDrivers = useSelector(state => state.drivers);
+    const search = useSelector(state => state.name);
     const drivers = useSelector(state => {
-    
         return state.suggested
     });
+
     const dispatch = useDispatch();
     const numDrivers = 9;
 
-
+    
     const [filters, setFilters] = React.useState({
-        origin: types.origin_api,
+        origin: types.origin_any,
         order: types.asc_alphabetic,
-        currTeam: 'x'
+        currTeam: 'Any team'
     });
 
     const [filteredTeams, setFilteredTeams] = React.useState([]);
 
     React.useEffect(() => {
         !drivers.length && dispatch(getAllDrivers());
+        
     }, [])    
+
+
 
     React.useEffect(() => {
         updateFiltered();
-    }, [filters, filteredTeams]);
+    }, [filters, filteredTeams, search]);
 
 
     const handleEliminate = (team) => {
@@ -54,17 +59,20 @@ export default function ShowDrivers({page, setPage, teams})
     }
 
     const updateFiltered = () => {
-        let filtered = filterByOrigin(filters.origin, allDrivers);
+        let filtered = filterByName(search, allDrivers);
+        filtered = filterByOrigin(filters.origin, filtered);
         filtered = filterByTeams(filteredTeams, filtered);
         filtered = filterByOrderType(filters.order, filtered);
 
         dispatch(updateSuggested(filtered));
+        setPage(1);
+
     }
 
     const handleFiltering = (filterType, value) => {
         if(filterType == 'TEAMS')
         {
-            if(value == 'x') 
+            if(value == 'Any team') 
             {
                 setFilteredTeams([]);
                 setFilters(prev => new Object({...prev, currTeam: value}));
@@ -81,6 +89,13 @@ export default function ShowDrivers({page, setPage, teams})
 
         if(filterType == 'ORIGIN')
         {
+            console.log(value);
+            if(value == "Any origin")
+            {
+                console.log("Soy any origin");
+                setFilters(prev => new Object({...prev, origin: types.origin_any}))
+            }
+
             setFilters(prev => new Object({...prev, origin: value}));
             return;
         }
@@ -110,18 +125,20 @@ export default function ShowDrivers({page, setPage, teams})
     }
   
     return (
-        <div>
-            <div>
-                <select value={filters.currTeam} onChange={(ev) => handleFiltering('TEAMS', ev.target.value)}>
-                    <option>x</option>
+        <div id="drivers-container">
+            <div id="filters-container">
+                <select id="teams-select" value={filters.currTeam} onChange={(ev) => handleFiltering('TEAMS', ev.target.value)}>
+                    <option>Any team</option>
                     {teams && teams.map((team, index) => <option key={index}>{team.name}</option>)}
                 </select>
-                <select value={filters.origin} onChange={(ev) => handleFiltering('ORIGIN', ev.target.value)}>
+
+                <select id="origin-select" value={filters.origin} onChange={(ev) => handleFiltering('ORIGIN', ev.target.value)}>
+                    <option>Any origin</option>
                     <option>{types.origin_api}</option>
                     <option>{types.origin_db}</option>
                 </select>
 
-                <select value={filters.order} onChange={(ev) => handleFiltering('ORDER', ev.target.value)} >
+                <select id="ordering-select" value={filters.order} onChange={(ev) => handleFiltering('ORDER', ev.target.value)} >
                     <option>{types.asc_alphabetic}</option>
                     <option>{types.des_alphabetic}</option>
 
@@ -129,19 +146,23 @@ export default function ShowDrivers({page, setPage, teams})
                     <option>{types.des_birthday}</option>
                 </select>
             </div>
+
             <div>
                 {
-                    filteredTeams.length && 
-                    filteredTeams.map((team, index) =>
-                    <>
-                        { filteredTeams.includes(team) && 
-                            <div key={index}>
-                                <div>{team}</div>
-                                <div style={{width: '50px', height: '50px', backgroundColor: 'white'}} onClick={() => handleEliminate(team)} className="eliminate"></div>
-                            </div>
-                        }
-                    </>
+                    filteredTeams.length ?
+                        filteredTeams.map((team, index) =>
+                        <>
+                            { filteredTeams.includes(team) && 
+                                <div key={index}>
+                                    <div key={team}>{team}</div>
+                                    <div key={team + index} style={{width: '50px', height: '50px', backgroundColor: 'white'}} onClick={() => handleEliminate(team)} className="eliminate"></div>
+                                </div>
+                            }
+                        </>
                     )
+                    :
+                    <></>
+                    
                 }
             </div>
                 

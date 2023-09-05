@@ -2,19 +2,39 @@ import { types } from "./ShowDrivers";
 
 function filterByOrigin(origin, drivers)
 {
-
+    
     if(drivers)
     {
         switch(origin)
         {
+
+            case types.origin_any:
+                return drivers
+
             case types.origin_db:
                 return drivers.filter(driver => driver.origin);
 
             case types.origin_api:
                 return drivers.filter(driver => !driver.origin);
+            
+            default:
+                return drivers
         }
 
     }
+}
+
+function filterByName(name, drivers)
+{
+    if(!name.length) return drivers;
+    
+    const update = drivers.filter(driver => {
+        const inFullName = `${(driver.name).toLowerCase()} ${(driver.surname).toLowerCase()}`.indexOf(name.toLowerCase()) > -1;
+
+        return inFullName;
+    });
+
+    return update;
 }
 
 function filterByTeams(teamsArr, drivers)
@@ -40,7 +60,6 @@ function filterByTeams(teamsArr, drivers)
             return true;
         }
 
-        console.log("Deberia ser fangio: " + driver["Teams"]);
 
         if(Array.isArray(driver["Teams"]))
         {
@@ -114,5 +133,6 @@ function filterByOrderType(order, drivers)
 export {
     filterByOrigin,
     filterByOrderType,
+    filterByName,
     filterByTeams
 }
