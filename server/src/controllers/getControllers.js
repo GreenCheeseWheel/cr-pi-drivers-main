@@ -6,8 +6,8 @@ async function getAllDrivers()
 {
     try
     {   
-        const drivers_arr = await Driver.findAll({include: Teams});
-
+        const drivers_arr = await Driver.findAll({include: "Teams"});
+        
 
         const drivers_arr_api = await axios.get('http://localhost:5000/drivers').then(res => res.data ).catch(error => {return {error: error.message}});
         
@@ -31,7 +31,8 @@ async function getAllDrivers()
     }
     catch(error)
     {
-        throw Error(error.message)
+        console.log("There was an error in getAllDrivers: " + error.message);
+        throw Error(error.message);
     }
     
 }
@@ -59,7 +60,7 @@ async function getDriverByName(name)
 {
     try
     {
-        let driver = await Driver.findOne({
+        let driver = await Driver.findAll({
             where: {
                 name: {
                     [Op.iLike]: name,
@@ -68,7 +69,7 @@ async function getDriverByName(name)
             include: Teams,
         });
         
-        return driver;
+        return driver.slice(0, 16);
     }
     catch(error)
     {
@@ -84,6 +85,7 @@ async function getTeams()
     {
         let teams_array = await Teams.findAll();
 
+        
         
         if(!teams_array.length)
         {

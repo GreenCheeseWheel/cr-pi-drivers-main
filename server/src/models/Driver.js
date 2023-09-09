@@ -2,7 +2,7 @@ const { DataTypes, STRING } = require('sequelize');
 
 module.exports = (sequelize) => {
 
-  sequelize.define('Driver', {
+  return sequelize.define('Driver', {
     id: {
       type: DataTypes.UUID,
       primaryKey: true,

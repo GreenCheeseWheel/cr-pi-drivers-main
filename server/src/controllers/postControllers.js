@@ -1,5 +1,5 @@
-const { Op } = require('sequelize');
 const {Driver, Teams, drivers_x_teams} = require('../db');
+
 
 async function postDriver(name, surname, description, image, nationality, birth, teams)
 {
@@ -41,6 +41,8 @@ async function postDriver(name, surname, description, image, nationality, birth,
     }
     
 }
+
+
 
 module.exports = {
     postDriver,

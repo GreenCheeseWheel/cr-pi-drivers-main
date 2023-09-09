@@ -37,12 +37,12 @@ export default function Nav()
     return(
         <>
             <nav title="navbar" id="navbar">
-                <ul id="navbar-contents">
+                <ul title="navbar-contents" id="navbar-contents">
                     <li className="navbar-link"><Link reloadDocument to='/'><img src={F1Logo}></img></Link></li>
-                    <li className="navbar-link"><Link reloadDocument to='/home'>Home</Link></li>
+                    <li className="navbar-link"><Link title="link-home" reloadDocument to='/home'>Home</Link></li>
                     { 
                         pathname === '/home' && (
-                            <li id="navbar-searchbar">
+                            <li title="navbar-searchbar" id="navbar-searchbar">
                                 <input 
                                     type="text" 
                                     value={search} 

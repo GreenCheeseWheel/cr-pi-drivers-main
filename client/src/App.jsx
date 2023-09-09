@@ -27,6 +27,7 @@ function App() {
       <Route path='/home' element={<Home />} />
       <Route path='/driver/:name' element={<DriverDetail />} />
       <Route path='/create' element={<Form />} />
+      <Route path='/update/:id' element={<Form />} />
     </Routes>
     </>
   )

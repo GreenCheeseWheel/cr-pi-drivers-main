@@ -109,14 +109,16 @@ function filterByOrderType(order, drivers)
 
 
         case types.asc_birthday:
+            
             ordered.sort((driverA, driverB) => {
                 if(driverA.birth > driverB.birth) return 1;
                 if(driverB.birth > driverA.birth) return -1;
                 return 0;
             });
+            
             break;
         
-        case types.asc_birthday:
+        case types.des_birthday:
             ordered.sort((driverA, driverB) => {
                 if(driverA.birth > driverB.birth) return -1;
                 if(driverB.birth > driverA.birth) return 1;

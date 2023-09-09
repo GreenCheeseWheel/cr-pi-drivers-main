@@ -1,9 +1,10 @@
 import React from "react"
+import axios from "axios"
 import "./index.css"
 import { validateAll } from "./validations";
 import { useDispatch } from "react-redux";
 import { getTeams } from "../../redux/actions";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 export default function Form()
 {
@@ -27,8 +28,10 @@ export default function Form()
         teams: "",
     });
 
+    const {id} = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const location = useLocation().pathname;
 
     React.useEffect(() => {
         dispatch(getTeams());
@@ -50,9 +53,10 @@ export default function Form()
                 return;
             }
         }
-
-
-        fetch('http://localhost:3001/drivers', {
+        console.log("Validaciones hechas");
+        if(location == '/create')
+        {
+            fetch('http://localhost:3001/drivers', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -60,10 +64,24 @@ export default function Form()
             },
             body: JSON.stringify(driver),
             
-        })
-        .then(() => navigate("/"))
-        .catch(error => console.error(error.message));
+            })
+            .then(() => navigate("/home"))
+            .catch(error => console.error(error.message));
 
+            return;
+        }
+
+        else
+        {
+            
+            
+            axios
+                .put(`http://localhost:3001/driver`, {...driver, id})
+                .then(() => navigate('/home'))
+                .catch(error => console.error(error.message));
+        }
+
+        
     
 
     }
