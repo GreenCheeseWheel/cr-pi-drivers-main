@@ -1,19 +1,29 @@
-const {Driver, Teams} = require('../db');
+const {Driver, Teams, User} = require('../db');
 const axios = require('axios');
 const {Op} = require('sequelize');
 
-async function getAllDrivers()
+async function getAllDrivers(userEmail)
 {
-    try
-    {   
-        const drivers_arr = await Driver.findAll({include: "Teams"});
+    
+    const user = await User.findOne({
+        where: {
+            email: userEmail
+        }
+    });
+
+    if(user == null) throw Error("No such user in the database");
+
+    const drivers = await user.getDrivers();
+    console.log("Los drivers son: " + drivers[0]);
+
+    const drivers_arr = await Driver.findAll({include: "Teams"});
         
 
-        const drivers_arr_api = await axios.get('http://localhost:5000/drivers').then(res => res.data ).catch(error => {return {error: error.message}});
+    const drivers_arr_api = await axios.get('http://localhost:5000/drivers').then(res => res.data ).catch(error => {return {error: error.message}});
         
-        for(const driver of drivers_arr_api)
-        {
-            drivers_arr.push({
+    for(const driver of drivers_arr_api)
+    {
+        drivers_arr.push({
                 id: driver.id,
                 name: driver.name.forename,
                 surname: driver.name.surname,
@@ -22,18 +32,12 @@ async function getAllDrivers()
                 nationality: driver.nationality,
                 birth: driver.dob,
                 teams: driver.teams
-            })
-        }
+        })
+    }
     
 
 
-        return drivers_arr;
-    }
-    catch(error)
-    {
-        console.log("There was an error in getAllDrivers: " + error.message);
-        throw Error(error.message);
-    }
+    return drivers_arr;
     
 }
 

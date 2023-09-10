@@ -5,6 +5,7 @@ import { validateAll } from "./validations";
 import { useDispatch } from "react-redux";
 import { getTeams } from "../../redux/actions";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { getCookie } from "../../cookies/getCookie";
 
 export default function Form()
 {
@@ -53,7 +54,7 @@ export default function Form()
                 return;
             }
         }
-        console.log("Validaciones hechas");
+        
         if(location == '/create')
         {
             fetch('http://localhost:3001/drivers', {
@@ -62,7 +63,7 @@ export default function Form()
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin':'*',
             },
-            body: JSON.stringify(driver),
+            body: JSON.stringify({...driver, userEmail: getCookie("email-drivers")}),
             
             })
             .then(() => navigate("/home"))

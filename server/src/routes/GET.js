@@ -3,10 +3,15 @@ const {getAllDrivers, getDriverById, getTeams, getDriverByName} = require('../co
 
 
 getRouter.get('/drivers', (req, res) => {
-    
-    getAllDrivers()
+    const {email} = req.query;
+
+    getAllDrivers(email)
         .then(data => res.status(200).json(data))
-        .catch(error => res.status(500).json({error: error.message}));
+        .catch(error => {
+            console.log(error.message);
+            res.status(500).json({error: error.message})
+            
+        });
     
 });
 

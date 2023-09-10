@@ -1,7 +1,7 @@
-const {Driver, Teams, drivers_x_teams} = require('../db');
+const {Driver, Teams, User, user_x_drivers, drivers_x_teams} = require('../db');
 
 
-async function postDriver(name, surname, description, image, nationality, birth, teams)
+async function postDriver(name, surname, description, image, nationality, birth, teams, userEmail)
 {
     try
     {
@@ -28,12 +28,13 @@ async function postDriver(name, surname, description, image, nationality, birth,
         }
 
 
-        
         for(let i = 0; i < teams_resp.length; i++)
         {
             await drivers_x_teams.create({DriverId: driver.id, TeamId: teams_resp[i].id });
         }
-        return;
+
+        await user_x_drivers.create({DriverId: driver.id, UserEmail: userEmail});
+
     }
     catch(error)
     {
@@ -42,8 +43,49 @@ async function postDriver(name, surname, description, image, nationality, birth,
     
 }
 
+async function loginUser(email, password)
+{
+    const user = await User.findOne({
+        where: {
+            email,
+        },
+    });
 
+    if(user == null)
+    {
+        throw Error("No user with such mail found");
+    }
+
+    if(user.password != password)
+    {
+        throw Error("Incorrect password");
+    }
+
+    if(!user.logged)
+    {
+        await User.update({logged: true}, {
+            where: {
+                email
+            }
+        })
+    }
+    
+}
+
+async function logoutUser(email)
+{
+    const user = await User.findOne({
+        where: {
+            email
+        }
+    });
+
+    if(user == null) throw Error("Acces violation: Non-existent user");
+
+}
 
 module.exports = {
     postDriver,
+    loginUser,
+    logoutUser
 }
