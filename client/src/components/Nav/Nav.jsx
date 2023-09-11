@@ -50,7 +50,7 @@ export default function Nav()
             <nav title="navbar" id="navbar">
                 <ul title="navbar-contents" id="navbar-contents">
                     <li className="navbar-link"><Link reloadDocument to='/'><img src={F1Logo}></img></Link></li>
-                    <li className="navbar-link"><Link title="link-home" reloadDocument to='/home'>Home</Link></li>
+                    <li className="navbar-link"><Link title="link-home"  to='/home'>Home</Link></li>
                     { 
                         pathname === '/home' && (
                             <li title="navbar-searchbar" id="navbar-searchbar">

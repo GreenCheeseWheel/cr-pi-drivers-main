@@ -1,9 +1,10 @@
 import React from "react"
 import DriverCard from "../DriverCard/DriverCard";
 import {useDispatch, useSelector} from 'react-redux'
-import { getAllDrivers, updateSuggested } from "../../redux/actions";
+import { getAllDrivers, updateSuggested, updateTeams } from "../../redux/actions";
 import { filterByName, filterByOrderType, filterByOrigin, filterByTeams } from "./filters";
 import './index.css'
+import { UPDATE_TEAMS } from "../../redux/types";
 
 export const types = {
     origin_any: 'ANY',
@@ -21,6 +22,10 @@ export default function ShowDrivers({page, setPage, teams})
 {
     const allDrivers = useSelector(state => state.drivers);
     const search = useSelector(state => state.name);
+    const originFilter = useSelector(state => state.originFilter);
+    const orderFilter = useSelector(state => state.orderFilter);
+    const teamsFilter = useSelector(state => state.teamsFilter);
+
     const drivers = useSelector(state => {
         return state.suggested
     });
@@ -29,40 +34,28 @@ export default function ShowDrivers({page, setPage, teams})
     const numDrivers = 9;
 
     
-    const [filters, setFilters] = React.useState({
-        origin: types.origin_any,
-        order: types.asc_alphabetic,
-        currTeam: 'Any team'
-    });
-
-    const [filteredTeams, setFilteredTeams] = React.useState([]);
-
     React.useEffect(() => {
-        !drivers.length && dispatch(getAllDrivers());
+        if(!drivers.length) {
+            dispatch(getAllDrivers());
+        }
         
     }, [])    
 
 
-
     React.useEffect(() => {
         updateFiltered();
-    }, [filters, filteredTeams, search]);
+    }, [originFilter, teamsFilter, orderFilter, search]);
 
 
     const handleEliminate = (team) => {
-
-        setFilteredTeams(prev => {
-            let newFilteredTeams = prev.filter(teamName => teamName !== team);
-            return newFilteredTeams;
-        });
-
+        dispatch(updateTeams(teamsFilter.filter(teamName => teamName !== team)))
     }
 
     const updateFiltered = () => {
         let filtered = filterByName(search, allDrivers);
-        filtered = filterByOrigin(filters.origin, filtered);
-        filtered = filterByTeams(filteredTeams, filtered);
-        filtered = filterByOrderType(filters.order, filtered);
+        filtered = filterByOrigin(originFilter, filtered);
+        filtered = filterByTeams(teamsFilter, filtered);
+        filtered = filterByOrderType(orderFilter, filtered);
 
         dispatch(updateSuggested(filtered));
         setPage(1);
@@ -74,35 +67,34 @@ export default function ShowDrivers({page, setPage, teams})
         {
             if(value == 'Any team') 
             {
-                setFilteredTeams([]);
-                setFilters(prev => new Object({...prev, currTeam: value}));
+                dispatch(updateTeams([]));
+              
                 return;
             }
 
-            if(!filteredTeams.includes(value)) 
+            if(!teamsFilter.includes(value)) 
             {
-                setFilteredTeams(prev => [...prev, value]);
-                setFilters(prev => new Object({...prev, currTeam: value}));
+                dispatch(updateTeams([...teamsFilter,value]));
                 return;
             }
         }
 
         if(filterType == 'ORIGIN')
         {
-            console.log(value);
+            
             if(value == "Any origin")
             {
-                console.log("Soy any origin");
-                setFilters(prev => new Object({...prev, origin: types.origin_any}))
+                dispatch({type: "UPDATE_ORIGIN", payload: "ANY"});
             }
-
-            setFilters(prev => new Object({...prev, origin: value}));
+        
+            dispatch({type: "UPDATE_ORIGIN", payload: value})
+            
             return;
         }
 
         if(filterType == 'ORDER')
         {
-            setFilters(prev => new Object({...prev, order: value}))
+            dispatch({type: "UPDATE_ORDER", payload: value})
         }
 
     }
@@ -127,18 +119,18 @@ export default function ShowDrivers({page, setPage, teams})
     return (
         <div id="drivers-container">
             <div id="filters-container">
-                <select id="teams-select" value={filters.currTeam} onChange={(ev) => handleFiltering('TEAMS', ev.target.value)}>
+                <select id="teams-select" value={[...teamsFilter].pop()} onChange={(ev) => handleFiltering('TEAMS', ev.target.value)}>
                     <option>Any team</option>
                     {teams && teams.map((team, index) => <option key={index}>{team.name}</option>)}
                 </select>
 
-                <select id="origin-select" value={filters.origin} onChange={(ev) => handleFiltering('ORIGIN', ev.target.value)}>
+                <select id="origin-select" value={originFilter} onChange={(ev) => handleFiltering('ORIGIN', ev.target.value)}>
                     <option>Any origin</option>
                     <option>{types.origin_api}</option>
                     <option>{types.origin_db}</option>
                 </select>
 
-                <select id="ordering-select" value={filters.order} onChange={(ev) => handleFiltering('ORDER', ev.target.value)} >
+                <select id="ordering-select" value={orderFilter} onChange={(ev) => handleFiltering('ORDER', ev.target.value)} >
                     <option>{types.asc_alphabetic}</option>
                     <option>{types.des_alphabetic}</option>
 
@@ -149,10 +141,10 @@ export default function ShowDrivers({page, setPage, teams})
 
             <div>
                 {
-                    filteredTeams.length ?
-                        filteredTeams.map((team, index) =>
+                    teamsFilter.length ?
+                        teamsFilter.map((team, index) =>
                         <>
-                            { filteredTeams.includes(team) && 
+                            { teamsFilter.includes(team) && 
                                 <div key={index}>
                                     <div key={team}>{team}</div>
                                     <div key={team + index} style={{width: '50px', height: '50px', backgroundColor: 'white'}} onClick={() => handleEliminate(team)} className="eliminate"></div>

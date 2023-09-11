@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GET_ALL, GET_ALL_TEAMS, GET_BY_NAME, UPDATE_SUGGESTED } from "./types";
+import { GET_ALL, GET_ALL_TEAMS, GET_BY_NAME, UPDATE_SUGGESTED, UPDATE_TEAMS } from "./types";
 import { getCookie } from "../cookies/getCookie";
 
 function getAllDrivers()
@@ -38,6 +38,16 @@ function updateSuggested(suggested)
     return {type: UPDATE_SUGGESTED, payload: suggested};
 }
 
+function updateTeams(teams)
+{
+    return {type: UPDATE_TEAMS, payload: teams};
+}
 
 
-export {getAllDrivers, getTeams, updateSearch, updateSuggested}
+export {
+    getAllDrivers, 
+    getTeams, 
+    updateSearch,
+    updateSuggested,
+    updateTeams
+}
