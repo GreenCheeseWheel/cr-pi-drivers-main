@@ -30,7 +30,10 @@ export default function Nav()
                 document.cookie = "email-drivers=;path=/;expires=Thu, 01 Jan 1970 00:00:01 GMT;";
                 navigate(0);
             })
-            .catch();
+            .catch(() => {
+                document.cookie = "email-drivers=;path=/;expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+                navigate(0);
+            });
     };
 
     React.useEffect(() => {

@@ -34,8 +34,8 @@ const { Driver, Teams, User} = sequelize.models;
 Driver.belongsToMany(Teams, {through: 'drivers_x_teams'});
 Teams.belongsToMany(Driver, {through: 'drivers_x_teams'});
 
-User.belongsToMany(Driver, {through: 'user_x_drivers'});
-Driver.belongsToMany(User, {through: 'user_x_drivers'});
+User.belongsToMany(Driver, {through: 'users_x_drivers'});
+Driver.belongsToMany(User, {through: 'users_x_drivers'});
 
 
 module.exports = {

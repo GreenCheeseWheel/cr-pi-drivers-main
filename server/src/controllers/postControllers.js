@@ -1,10 +1,11 @@
-const {Driver, Teams, User, user_x_drivers, drivers_x_teams} = require('../db');
+const {Driver, Teams, User, users_x_drivers, drivers_x_teams} = require('../db');
 
 
 async function postDriver(name, surname, description, image, nationality, birth, teams, userEmail)
 {
     try
     {
+        console.log("User email es: " + userEmail);
         const driver = await Driver.create({name, 
             surname, 
             description, 
@@ -13,9 +14,10 @@ async function postDriver(name, surname, description, image, nationality, birth,
             origin: 'db'
         });
         
+        
         const teams_arr = teams.split(',').map(team => new Object({name: team.trim()}));
         const teams_resp = [];
-
+        
         for(const team of teams_arr)
         {
             const [teamFromDb, created] = await Teams.findOrCreate({
@@ -27,13 +29,16 @@ async function postDriver(name, surname, description, image, nationality, birth,
             teams_resp.push(teamFromDb);
         }
 
-
+        console.log("User email es: " + userEmail);
+        console.log("El driver id es: " + driver.id);
         for(let i = 0; i < teams_resp.length; i++)
         {
             await drivers_x_teams.create({DriverId: driver.id, TeamId: teams_resp[i].id });
         }
 
-        await user_x_drivers.create({DriverId: driver.id, UserEmail: userEmail});
+        console.log("User email es: " + userEmail);
+        console.log("El driver id es: " + driver.id);
+        await users_x_drivers.create({DriverId: driver.id, UserEmail: userEmail});
 
     }
     catch(error)

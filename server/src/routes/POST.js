@@ -6,7 +6,10 @@ postRouter.post('/drivers', (req, res) => {
 
     postDriver(name, surname, description, image, nationality, birth, teams, userEmail)
     .then(() => res.status(200).end())
-    .catch(err => res.status(500).json({error: err.message}))
+    .catch(err => {
+        console.log(err.message);
+        res.status(500).json({error: err.message})
+    })
 
 });
 

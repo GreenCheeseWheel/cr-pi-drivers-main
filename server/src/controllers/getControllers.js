@@ -13,10 +13,23 @@ async function getAllDrivers(userEmail)
 
     if(user == null) throw Error("No such user in the database");
 
-    const drivers = await user.getDrivers();
-    console.log("Los drivers son: " + drivers[0]);
+    const drivers = (await user.getDrivers()).map(driver => driver.name);
 
-    const drivers_arr = await Driver.findAll({include: "Teams"});
+    let drivers_arr = [];
+
+    if(drivers.length)
+    {
+        drivers_arr = await Driver.findAll({
+            where: {
+                name: {
+                    [Op.or]: drivers
+                },
+            },
+            include: Teams 
+        });
+    }
+    
+    //const drivers_arr = await Driver.findAll({include: "Teams"});
         
 
     const drivers_arr_api = await axios.get('http://localhost:5000/drivers').then(res => res.data ).catch(error => {return {error: error.message}});
