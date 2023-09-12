@@ -1,0 +1,12 @@
+.pagination-container {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+
+    max-width: 50%;
+    max-height: 39px;
+    overflow-x: scroll;
+
+    margin-top: 2rem;
+    padding-bottom: 15px;
+}

@@ -113,13 +113,15 @@ async function getTeams()
         let teams_array = await Teams.findAll();
 
         
-        
         if(!teams_array.length)
         {
             // There are 4 null values among the teams.
             let drivers_resp = await axios.get('http://localhost:5000/drivers');
+            
             drivers_resp = await drivers_resp.data;
             
+            
+
             // Processing null values and creating teams array
             drivers_resp = drivers_resp.map(driver => driver.teams != null ? driver.teams : 'unknown');
             drivers_resp = drivers_resp.map(team_name => team_name.split(','));

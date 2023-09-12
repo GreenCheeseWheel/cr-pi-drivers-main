@@ -5,6 +5,8 @@ import { getAllDrivers, updateSuggested, updateTeams } from "../../redux/actions
 import { filterByName, filterByOrderType, filterByOrigin, filterByTeams } from "./filters";
 
 import './index.css'
+import Button from "../Button/Button";
+import Pagination from "./Pagination/Pagination";
 
 export const types = {
     origin_any: 'ANY',
@@ -25,7 +27,7 @@ export default function ShowDrivers({page, setPage, teams})
     const originFilter = useSelector(state => state.originFilter);
     const orderFilter = useSelector(state => state.orderFilter);
     const teamsFilter = useSelector(state => state.teamsFilter);
-    
+    const [maxPage, setMaxPage] = React.useState([1]);
 
     const drivers = useSelector(state => {
         return state.suggested
@@ -36,12 +38,19 @@ export default function ShowDrivers({page, setPage, teams})
 
     
     React.useEffect(() => {
-        
         dispatch(getAllDrivers());
-        
           
     }, [])    
 
+    React.useEffect(() => {
+        setMaxPage(() => {
+            let max = Math.ceil(drivers.length / numDrivers);
+            let newMax = new Array(max);
+            newMax.fill(1);
+            return newMax;
+        });
+
+    }, [allDrivers, drivers]);
 
     React.useEffect(() => {
         updateFiltered();
@@ -176,9 +185,15 @@ export default function ShowDrivers({page, setPage, teams})
                 })
             }
             </div>
+            
+            <Pagination 
+                page={page} 
+                setPage={setPage} 
+                maxPage={maxPage} 
+                drivers={drivers}
+                numDrivers={numDrivers}
+                />
 
-            <button onClick={handlePreviousPage} disabled={page == 1 ? true : false} >Previous</button>
-            <button onClick={handleNextPage} disabled={page >= drivers.length / numDrivers ? true : false} >Next</button>
         </div>
     )
 }

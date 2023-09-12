@@ -8,11 +8,6 @@
     
 }
 
-/*
-grid-template-rows: 1fr 2fr 1fr;
-    grid-template-columns: 1fr;
-*/
-
 #driver-card {  
     display: flex;
     flex-direction: column;
@@ -20,10 +15,12 @@ grid-template-rows: 1fr 2fr 1fr;
     align-items: center;
     text-align: center;
 
+    background-color: rgba(150, 150, 150, 0.6);
     border-right: 1px solid white;
     border-top: 1px solid white;
     border-top-right-radius : 7px;
 
+    padding-bottom: 5px;
     cursor: pointer;
 
     width: 100%;
@@ -59,5 +56,9 @@ grid-template-rows: 1fr 2fr 1fr;
 
 #driver-teams{
     color: rgba(255, 255, 255, 0.9);
+    height: fit-content;
+    display: -webkit-box;
     margin-bottom: 0;
+    text-overflow: ellipsis;
+    
 }
