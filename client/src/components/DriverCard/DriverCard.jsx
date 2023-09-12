@@ -8,7 +8,7 @@ export default function DriverCard({id, name,image, teams})
 
     return (
         <div id="driver-card-container">
-            <div onClick={() => navigate('/driver/' + name)} id="driver-card">
+            <div onClick={() => navigate('/driver/' + id)} id="driver-card">
                 <span id="driver-name">{name}</span>
                 <div id="driver-image-container">
                     <img id="driver-image" src={image} title={name} alt="image-not-found"></img>

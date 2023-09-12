@@ -3,8 +3,8 @@ import DriverCard from "../DriverCard/DriverCard";
 import {useDispatch, useSelector} from 'react-redux'
 import { getAllDrivers, updateSuggested, updateTeams } from "../../redux/actions";
 import { filterByName, filterByOrderType, filterByOrigin, filterByTeams } from "./filters";
+
 import './index.css'
-import { UPDATE_TEAMS } from "../../redux/types";
 
 export const types = {
     origin_any: 'ANY',
@@ -25,6 +25,7 @@ export default function ShowDrivers({page, setPage, teams})
     const originFilter = useSelector(state => state.originFilter);
     const orderFilter = useSelector(state => state.orderFilter);
     const teamsFilter = useSelector(state => state.teamsFilter);
+    
 
     const drivers = useSelector(state => {
         return state.suggested
@@ -35,16 +36,16 @@ export default function ShowDrivers({page, setPage, teams})
 
     
     React.useEffect(() => {
-        if(!drivers.length) {
-            dispatch(getAllDrivers());
-        }
         
+        dispatch(getAllDrivers());
+        
+          
     }, [])    
 
 
     React.useEffect(() => {
         updateFiltered();
-    }, [originFilter, teamsFilter, orderFilter, search]);
+    }, [originFilter, teamsFilter, orderFilter, search, allDrivers]);
 
 
     const handleEliminate = (team) => {

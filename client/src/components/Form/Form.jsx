@@ -66,7 +66,9 @@ export default function Form()
             body: JSON.stringify({...driver, userEmail: getCookie("email-drivers")}),
             
             })
-            .then()
+            .then(() => {
+                navigate('/');
+            })
             .catch(error => console.error(error.message));
 
             return;

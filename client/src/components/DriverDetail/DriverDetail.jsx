@@ -1,23 +1,35 @@
+import React from "react";
 import { useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom"
 import "./index.css"
 import axios from "axios";
 
+
 export default function DriverDetail()
 {
-    const {name} = useParams();
+    const {id} = useParams();
     const navigate = useNavigate();
 
-    const driver = useSelector(state => {
-        for(let i = 0; i < state.drivers.length; i++)
-        {
-            if(`${state.drivers[i].name} ${state.drivers[i].surname}` == name)
-            {
-                return state.drivers[i];
-            }
-        }
-
+    const [driver, setDriver] = React.useState({
+        id: id, 
+        name: '', 
+        surname: '', 
+        image: '',
+        Teams: '',
+        birth: '',
+        nationality: '',
+        description: '',
     });
+
+
+    React.useEffect(() => {
+        axios.get(`http://localhost:3001/drivers/${id}`).then(res => {
+            setDriver(res.data);
+        })
+        .catch((err) => console.log(err.response.data))
+        
+        
+    }, []);
 
     const handleDelete = () => {
         axios
@@ -34,7 +46,7 @@ export default function DriverDetail()
         driver && (
         <div id="driver-detail">
             {
-                driver["Teams"] && (
+                driver.origin && (
                 <div>
                     <button onClick={handleUpdate}>Update</button>
                     <button onClick={handleDelete}>Delete</button>
@@ -42,7 +54,7 @@ export default function DriverDetail()
                 )
             }
             <p>{driver.id}</p>
-            <p>{driver.teams ? driver.teams : driver["Teams"].map(team => team.name).join(', ') }</p>
+            <p>{Array.isArray(driver.Teams) ? driver.Teams.map(team => team.name).join(', ') : driver.Teams }</p>
             <p>{driver.name} {driver.surname}</p>
             <img src={driver.image} />
             <p>{driver.birth}</p>

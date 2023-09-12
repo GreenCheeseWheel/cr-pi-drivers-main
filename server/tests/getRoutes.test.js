@@ -1,16 +1,18 @@
 const { default: axios } = require('axios');
 const app = require('../src/server');
 const {agent} = require('supertest');
+const {conn} = require('../src/db');
 const server = agent(app); 
 
 let driverId = 1;
 
 describe('Get all drivers', () => {
 
+
     it('Should retrieve api drivers with some modifications when db is empty', async () => {
         
         let apiResponse = (await axios('http://localhost:5000/drivers')).data;
-        let response = await server.get('/drivers').expect(200);
+        let response = await server.get('/drivers?email=green@gmail.com').expect(200);
         expect(response.body.length).toBe(apiResponse.length);
     });
 
@@ -27,9 +29,9 @@ describe('Get all drivers', () => {
         }
 
         let apiDriversNum = (await axios('http://localhost:5000/drivers')).data.length;
-        await server.post('/drivers').send(driver).expect(200);
+        await server.post('/drivers').send({...driver, userEmail: 'green@gmail.com'}).expect(200);
 
-        let response = await server.get('/drivers').expect(200);
+        let response = await server.get('/drivers?email=green@gmail.com').expect(200);
         expect(response.body.length).toBe(apiDriversNum + 1);
 
     })
@@ -45,13 +47,13 @@ describe('Get all drivers', () => {
             Teams: 'Mercedes, BMW',
         }
 
-        const driverJohan = (await server.get('/drivers/name?name=Johan')).body;
+        const driverJohan = (await server.get('/drivers/name?name=Johan')).body[0];
         
         const mercedes = driverJohan["Teams"][0].name;
         const bmw = driverJohan["Teams"][1].name; 
 
         driverId = driverJohan.id;
-        expect({...driverJohan, Teams: `${mercedes}, ${bmw}`} ).toEqual({...driver, id: driverId});
+        expect({...driverJohan, Teams: `${mercedes}, ${bmw}`} ).toEqual({...driver, id: driverId, origin: 'db'});
     });
 
 
@@ -70,12 +72,13 @@ describe('Get driver by id', () => {
         };
 
         const driverRes = (await server.get('/drivers/' + driverId)).body;
+        
         expect(driverRes.name).toBe(driver.name);
 
     });
 
     it("Should retrieve a driver from the api if id is not in database",async () => {
-        const driverRes = (await server.get('/drivers/' + (driverId+1) )).body;
+        const driverRes = (await server.get('/drivers/' + 1)).body;
         expect(driverRes.image).not.toBe('https://www.unaimagen.com/1');
     });
 });

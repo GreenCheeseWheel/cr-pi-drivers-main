@@ -2,6 +2,8 @@ const {Driver, Teams, User} = require('../db');
 const axios = require('axios');
 const {Op} = require('sequelize');
 
+const DEFAULT_IMAGE = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/F1.svg/1920px-F1.svg.png";
+
 async function getAllDrivers(userEmail)
 {
     
@@ -25,24 +27,23 @@ async function getAllDrivers(userEmail)
                     [Op.or]: drivers
                 },
             },
-            include: Teams 
+            include: Teams ,
+            attributes: {exclude: ['description', 'nationality']}
         });
     }
     
-    //const drivers_arr = await Driver.findAll({include: "Teams"});
-        
+ 
 
     const drivers_arr_api = await axios.get('http://localhost:5000/drivers').then(res => res.data ).catch(error => {return {error: error.message}});
         
     for(const driver of drivers_arr_api)
     {
+        // We don't include description nor nationality
         drivers_arr.push({
                 id: driver.id,
                 name: driver.name.forename,
                 surname: driver.name.surname,
-                description: driver.description,
-                image: driver.image.url.trim() != "" ? driver.image.url : "https://es.wikipedia.org/wiki/Temporada_2022_de_F%C3%B3rmula_1#/media/Archivo:2022_Formula_One_car_at_the_2021_British_Grand_Prix_(51350002179).jpg",
-                nationality: driver.nationality,
+                image: driver.image.url.trim() != "" ? driver.image.url : DEFAULT_IMAGE,
                 birth: driver.dob,
                 teams: driver.teams
         })
@@ -56,21 +57,30 @@ async function getAllDrivers(userEmail)
 
 async function getDriverById(id)
 {
-    try
+    let checkUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    if(checkUUID.test(id))
     {
-
+        
         let driver = await Driver.findByPk(id, {
             include: Teams,
         });
 
-        if(driver) return driver;
-        return (await axios.get('http://localhost:5000/drivers/' + id)).data;
+        if(driver == null) throw Error("No such driver in the database");
+        return driver;
+    }
+    
+    let driver = (await axios.get('http://localhost:5000/drivers/' + id)).data;
+    driver = {
+        nationality: driver.nationality,
+        image: driver.image.url ? driver.image.url : DEFAULT_IMAGE,
+        name: driver.name.forename,
+        surname: driver.name.surname,
+        description: driver.description,
+        birth: driver.dob,
+        Teams: driver.teams
+    }
 
-    }
-    catch(error)
-    {
-        throw Error(error.message);
-    }
+    return driver;
 }
 
 async function getDriverByName(name)

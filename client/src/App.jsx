@@ -38,7 +38,7 @@ function App() {
     <Routes>
       <Route path='/' element={<Landing />} />
       <Route path='/home' element={<Home />} />
-      <Route path='/driver/:name' element={<DriverDetail />} />
+      <Route path='/driver/:id' element={<DriverDetail />} />
       <Route path='/create' element={<Form />} />
       <Route path='/update/:id' element={<Form />} />
       <Route path='/login' element={<LoginForm setIsLogged={setIsLogged}/>}/>

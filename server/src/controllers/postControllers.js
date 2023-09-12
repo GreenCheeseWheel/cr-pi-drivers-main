@@ -5,7 +5,6 @@ async function postDriver(name, surname, description, image, nationality, birth,
 {
     try
     {
-        console.log("User email es: " + userEmail);
         const driver = await Driver.create({name, 
             surname, 
             description, 
@@ -29,15 +28,12 @@ async function postDriver(name, surname, description, image, nationality, birth,
             teams_resp.push(teamFromDb);
         }
 
-        console.log("User email es: " + userEmail);
-        console.log("El driver id es: " + driver.id);
+    
         for(let i = 0; i < teams_resp.length; i++)
         {
             await drivers_x_teams.create({DriverId: driver.id, TeamId: teams_resp[i].id });
         }
 
-        console.log("User email es: " + userEmail);
-        console.log("El driver id es: " + driver.id);
         await users_x_drivers.create({DriverId: driver.id, UserEmail: userEmail});
 
     }
