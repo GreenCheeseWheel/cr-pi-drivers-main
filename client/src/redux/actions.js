@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GET_ALL, GET_ALL_TEAMS, GET_BY_NAME, UPDATE_SUGGESTED, UPDATE_TEAMS } from "./types";
+import { GET_ALL, GET_ALL_TEAMS, GET_BY_NAME, UPDATE_DRIVERS, UPDATE_SUGGESTED, UPDATE_TEAMS } from "./types";
 import { getCookie } from "../cookies/getCookie";
 
 function getAllDrivers()
@@ -19,6 +19,12 @@ function getAllDrivers()
         }
     }
 }
+
+function updateDrivers(driver)
+{
+    return {type: UPDATE_DRIVERS, payload: driver}
+}
+
 
 function getTeams(teams)
 {
@@ -49,5 +55,6 @@ export {
     getTeams, 
     updateSearch,
     updateSuggested,
-    updateTeams
+    updateTeams,
+    updateDrivers
 }

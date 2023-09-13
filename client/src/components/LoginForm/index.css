@@ -1,0 +1,14 @@
+form {
+    width: 33%;
+    padding: 15px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin: auto;
+    padding-top: 1rem;
+    background-color: rgba(200, 200, 200, 0.6);
+}
+
+.error-msg {
+    color: red;
+}

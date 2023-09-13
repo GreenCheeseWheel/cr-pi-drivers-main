@@ -10,6 +10,9 @@ module.exports = (sequelize) => {
         password: {
             type: DataTypes.TEXT,
             allowNull: false,
+            validate: {
+                is: /[a-z][0-9][`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/i,
+            }
         }
     },{
         timestamps: false,

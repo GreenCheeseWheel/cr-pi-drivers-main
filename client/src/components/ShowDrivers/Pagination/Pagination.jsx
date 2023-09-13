@@ -7,7 +7,6 @@ export default function Pagination({page, setPage, maxPage, drivers, numDrivers}
     const handleNextPage = () => {
         setPage(prev => {
             const update = (prev*numDrivers >= drivers.length + 1 ) ? prev : prev + 1
-            if(update !== prev) window.scrollTo(0, 0);
             return update;
         });
     }
@@ -15,7 +14,6 @@ export default function Pagination({page, setPage, maxPage, drivers, numDrivers}
     const handlePreviousPage = () => {
         setPage(prev => {
             const update = prev == 1 ? prev : prev -1
-            if(update !== prev) window.scrollTo(0, 0);
             return update;
         });   
     }
@@ -25,14 +23,15 @@ export default function Pagination({page, setPage, maxPage, drivers, numDrivers}
     }, [page])
 
     return (
-        <div className="pagination-container" >
+        <div className="pagination-container">
             <Button onClick={handlePreviousPage} disabled={page == 1 ? true : false} text="Previous" />
-            
+            <div className="pagination-body">
             {
                 maxPage.map((pageEl, index) => 
                     <Button onClick={() => setPage(index+1)} disabled={page == index + 1} text={index+1}/>
                 )
             }
+            </div>
             
             <Button onClick={handleNextPage} disabled={page >= drivers.length / numDrivers ? true : false} text="Next" />
         </div>

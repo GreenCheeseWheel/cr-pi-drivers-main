@@ -1,10 +1,16 @@
-form {
-    width: 33%;
+#login {
+    min-width: 33%;
+    max-width: 75%;
+    width: fit-content;
+    padding: 15px;
+    
     display: grid;
     grid-template-columns: 1fr;
     gap: 10px;
     margin: auto;
+    margin-top: 100px;
     padding-top: 1rem;
+    background-color: rgba(200, 200, 200, 0.6);
 }
 
 .form-section {
@@ -25,4 +31,8 @@ form {
     background-color: #EE0000;
     border: 0;
     
+}
+
+.error-msg {
+    color: red;
 }

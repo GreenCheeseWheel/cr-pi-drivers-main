@@ -2,7 +2,8 @@ import React from "react";
 import axios from "axios";
 import { validateMail, validatePass } from "./validateFields";
 import { useNavigate } from "react-router-dom";
-
+import Button from "../Button/Button";
+import './index.css'
 
 export default function LoginForm({setIsLogged})
 {   
@@ -51,13 +52,13 @@ export default function LoginForm({setIsLogged})
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form id="login" onSubmit={handleSubmit}>
             <input value={email} onChange={handleMail} type="email" />
-            {!areValid.mail && <p>Invalid email</p>}
+            {!areValid.mail && <p className="error-msg">Invalid email</p>}
 
             <input value={password} onChange={handlePass} type="password"/>
-            {!areValid.pass && <span>Password must have letters, and at least one number and special character (for example '@') </span>}
-            <button>Submit</button>
+            {!areValid.pass && <p className="error-msg">Password must have letters, and at least one number and special character (for example '@') </p>}
+            <Button text="Submit" disabled={!(areValid.mail && areValid.pass)}/>
         </form>
     );
 }

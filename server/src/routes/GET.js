@@ -1,5 +1,8 @@
 const getRouter = require("express").Router();
-const {getAllDrivers, getDriverById, getTeams, getDriverByName} = require('../controllers/getControllers');
+const {getAllDrivers} = require('../controllers/GET/getAllDrivers');
+const {getDriverByName} = require('../controllers/GET/getDriverByName');
+const {getDriverById} = require('../controllers/GET/getDriverById');
+const {getTeams} = require('../controllers/GET/getTeams');
 
 
 getRouter.get('/drivers', (req, res) => {
@@ -17,7 +20,12 @@ getRouter.get('/drivers', (req, res) => {
 getRouter.get('/drivers/name', (req, res) => {
     const {name} = req.query;
 
-    getDriverByName(name).then(driver => res.status(200).json(driver));
+    getDriverByName(name)
+        .then(driver => res.status(200).json(driver))
+        .catch(err => {
+            console.log(err.message);
+            res.status(500).json({error: err.message})
+        });
 
 });
 
@@ -26,7 +34,10 @@ getRouter.get('/drivers/:idDriver', (req, res) => {
     
     getDriverById(idDriver)
         .then(driver => res.status(200).json(driver))
-        .catch(err => res.status(500).json({error: err.message}));
+        .catch(err => {
+            console.log(err.message);
+            res.status(500).json({error: err.message})
+        });
 
 
 });
@@ -34,7 +45,10 @@ getRouter.get('/drivers/:idDriver', (req, res) => {
 getRouter.get('/teams', (req, res) => {
     getTeams()
         .then(teams => res.status(200).json(teams))
-        .catch(err => res.status(500).json({error: err.message}));
+        .catch(err => {
+            console.log(err.message);
+            res.status(500).json({error: err.message})
+        });
 });
 
 module.exports = getRouter;

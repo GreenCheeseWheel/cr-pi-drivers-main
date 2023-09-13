@@ -1,20 +1,18 @@
-const { updateDriver } = require('../controllers/putControllers');
 const putRouter = require('express').Router();
+const {updateDriver} = require('../controllers/PUT/updateDriver');
 
-putRouter.put('/driver', async (req, res) => {
+putRouter.put('/driver', (req, res) => {
     const driverData = req.body;
 
-    try
-    {
-        await updateDriver(driverData);
-        res.status(200).end();
-    }
-    catch(error)
-    {
-        console.error(error);
-        res.status(500).json({error: error.message});
-    }
+    updateDriver(driverData)
+        .then(() => res.status(200).end())
+        .catch(err => {
+            console.error(err.message);
+            res.status(500).json({error: err.message});
 
+        })
+        
+        
 });
 
 module.exports = putRouter;

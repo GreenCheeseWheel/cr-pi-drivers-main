@@ -1,4 +1,4 @@
-const {Driver, Teams, drivers_x_teams} = require('../db');
+const {Driver, Teams, drivers_x_teams} = require('../../db');
 
 async function updateDriver({id, name, surname, teams, description})
 {
@@ -40,5 +40,5 @@ async function updateDriver({id, name, surname, teams, description})
 }
 
 module.exports = {
-    updateDriver
+    updateDriver,
 }

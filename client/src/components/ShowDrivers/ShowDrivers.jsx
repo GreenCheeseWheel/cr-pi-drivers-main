@@ -3,10 +3,10 @@ import DriverCard from "../DriverCard/DriverCard";
 import {useDispatch, useSelector} from 'react-redux'
 import { getAllDrivers, updateSuggested, updateTeams } from "../../redux/actions";
 import { filterByName, filterByOrderType, filterByOrigin, filterByTeams } from "./filters";
+import Pagination from "./Pagination/Pagination";
+
 
 import './index.css'
-import Button from "../Button/Button";
-import Pagination from "./Pagination/Pagination";
 
 export const types = {
     origin_any: 'ANY',
@@ -38,8 +38,10 @@ export default function ShowDrivers({page, setPage, teams})
 
     
     React.useEffect(() => {
-        dispatch(getAllDrivers());
-          
+        if(!drivers.length)
+        {
+            dispatch(getAllDrivers());
+        }
     }, [])    
 
     React.useEffect(() => {

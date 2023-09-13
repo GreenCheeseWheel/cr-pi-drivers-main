@@ -1,4 +1,4 @@
-const { deleteDriver } = require("../controllers/deleteCrontrollers");
+const { deleteDriver } = require("../controllers/DELETE/deleteDriver");
 
 const deleteRouter = require("express").Router();
 

@@ -2,13 +2,14 @@ import axios from "axios"
 import store from "../../redux/store"
 import { GET_ALL_TEAMS } from "../../redux/types";
 import { getTeams } from "../../redux/actions";
+import { getCountries } from "./countries";
 
 function validateName(name)
 {
 
-    const isCorrect = name.length > 0 && /[`!@#$%^&*()_\-+=\[\]{};:'"\\|,.<>\/?~]/.test(name);
+    const isIncorrect = /[`!@#$%^&*()_\-+=\[\]{};:'"\\|,.<>\/?~]/.test(name);
 
-    return !isCorrect;
+    return !isIncorrect && name.trim().length > 3;
 }
 
 function validateImage(url)
@@ -22,6 +23,30 @@ function validateImage(url)
     {
         return false;
     }
+}
+
+function validateNationality(nationality)
+{
+    let isValid = false;
+
+    for(const countryName of Object.values(getCountries()))
+    {
+        if(countryName.trim().toLowerCase() == nationality.trim().toLowerCase() )
+        {
+            isValid = true;
+        }
+    }
+
+    return isValid;
+}
+
+function validateBirth(date)
+{
+    const thisYear = new Date();
+    thisYear.setFullYear(thisYear.getFullYear() - 18);
+   
+    return thisYear > new Date(date);
+    
 }
 
 function validateDescription(description)
@@ -67,7 +92,7 @@ function validateAll(setDriver, setIsPermited, val, type)
         
         case 'nationality':
             setDriver(prev => new Object({...prev, nationality: val}));
-            setIsPermited(prev => new Object({...prev, nationality: validateName(val)}));
+            setIsPermited(prev => new Object({...prev, nationality: validateNationality(val)}));
             break;
         
         case 'image':
@@ -77,7 +102,7 @@ function validateAll(setDriver, setIsPermited, val, type)
         
         case 'birth':
             setDriver(prev => new Object({...prev, birth: val}));
-            setIsPermited(prev => new Object({...prev, birth: true}));
+            setIsPermited(prev => new Object({...prev, birth: validateBirth(val)}));
             break;
 
         case 'description':

@@ -41,6 +41,8 @@
 
 }
 
-.navbar-link > *{
+.navbar-link, .navbar-link > *{
     color: snow;
+    text-decoration: underline;
+    cursor: pointer;
 }

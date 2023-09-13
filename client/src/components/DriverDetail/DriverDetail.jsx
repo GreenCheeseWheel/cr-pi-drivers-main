@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom"
 import "./index.css"
 import axios from "axios";
+import Button from "../Button/Button";
 
 
 export default function DriverDetail()
@@ -45,14 +46,7 @@ export default function DriverDetail()
     return(
         driver && (
         <div id="driver-detail">
-            {
-                driver.origin && (
-                <div>
-                    <button onClick={handleUpdate}>Update</button>
-                    <button onClick={handleDelete}>Delete</button>
-                </div>
-                )
-            }
+            
             <p>{driver.id}</p>
             <p>{Array.isArray(driver.Teams) ? driver.Teams.map(team => team.name).join(', ') : driver.Teams }</p>
             <p>{driver.name} {driver.surname}</p>
@@ -60,6 +54,24 @@ export default function DriverDetail()
             <p>{driver.birth}</p>
             <p>{driver.nationality}</p>
             <p>{driver.description}</p>
+
+            {
+                driver.origin && (
+                <div id="ud-btns">
+                    <Button 
+                        text="Update"
+                        onClick={handleUpdate}
+                        disabled={false}
+                        />
+
+                    <Button
+                        text="Delete"
+                        onClick={handleDelete}
+                        disabled={false}
+                        />
+                </div>
+                )
+            }
             
         </div>
     )

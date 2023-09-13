@@ -41,15 +41,11 @@ export default function Nav()
     }, [search])
 
 
-    // We need to use the search state to search drivers by name
-    // Redux state will have a 'suggestions' property that will
-    // hold every suggested driver to display
-
     return(
         <>
             <nav title="navbar" id="navbar">
                 <ul title="navbar-contents" id="navbar-contents">
-                    <li className="navbar-link"><Link reloadDocument to='/'><img src={F1Logo}></img></Link></li>
+                    <li className="navbar-link"><Link to='/'><img src={F1Logo}></img></Link></li>
                     <li className="navbar-link"><Link title="link-home"  to='/home'>Home</Link></li>
                     { 
                         pathname === '/home' && (
@@ -64,7 +60,7 @@ export default function Nav()
                         ) 
                     }
                     <li className="navbar-link"><Link to='/create'>Create Driver</Link></li>
-                    <li onClick={logOut}>Log out</li>
+                    <li className="navbar-link" onClick={logOut}>Log out</li>
                 </ul>
             </nav>
             <div></div>

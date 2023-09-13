@@ -3,18 +3,26 @@ import axios from "axios"
 import "./index.css"
 import { validateAll } from "./validations";
 import { useDispatch } from "react-redux";
-import { getTeams } from "../../redux/actions";
+import { getAllDrivers, getTeams, updateDrivers } from "../../redux/actions";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { getCookie } from "../../cookies/getCookie";
+import Button from "../Button/Button"
+import FormInput from "../FormInput/FormInput";
 
 export default function Form()
 {
+
+    const {id} = useParams();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const location = useLocation().pathname;
+
     const [isPermited, setIsPermited] = React.useState({
         name: false,
         surname: false,
         nationality: false,
         image: false,
-        birth: false,
+        birth: location == '/create' ? false : true,
         description: false,
         teams: false,
     });
@@ -29,16 +37,13 @@ export default function Form()
         teams: "",
     });
 
-    const {id} = useParams();
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const location = useLocation().pathname;
 
     React.useEffect(() => {
         dispatch(getTeams());
     }, [])
 
     const handleFormChange = (val, type) => {
+        console.log("birth is: " + val);
         validateAll(setDriver, setIsPermited, val, type);
     }
 
@@ -57,20 +62,17 @@ export default function Form()
         
         if(location == '/create')
         {
-            fetch('http://localhost:3001/drivers', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin':'*',
-            },
-            body: JSON.stringify({...driver, userEmail: getCookie("email-drivers")}),
-            
-            })
-            .then(() => {
-                navigate('/');
-            })
-            .catch(error => console.error(error.message));
-
+            axios
+                .post('http://localhost:3001/drivers', {...driver, userEmail: getCookie("email-drivers")})
+                .then((res) => {
+                    const driver = res.data.driver.dataValues;
+                    dispatch(updateDrivers(driver));
+                    navigate('/home');
+                })
+                .catch(error => {
+                    alert('An error has ocurred in the database. Check the console for more info.');
+                    console.error(error.message)
+                })
             return;
         }
 
@@ -80,102 +82,103 @@ export default function Form()
             
             axios
                 .put(`http://localhost:3001/driver`, {...driver, id})
-                .then(() => navigate('/home'))
+                .then(() => {
+                    dispatch(getAllDrivers());
+                    navigate('/home')
+                })
                 .catch(error => console.error(error.message));
         }
-
-        
-    
 
     }
 
     return (
         <form onSubmit={handleSubmit}>
-            <div className="form-section">
-                <label htmlFor="name">Name</label>
-                <input 
-                    autoComplete="off"
-                    className="text-input"
-                    value={driver.name} onChange={(ev) => handleFormChange(ev.target.value, 'name')} 
-                    type="text" 
-                    id="name" 
-                    placeholder="Juan Manuel"
-                    />
+            {location == '/create' ? <h2>Create Driver</h2> : <h2>Update Driver</h2>}
+            <FormInput 
+                labelText="Name"
+                className="text-input"
+                value={driver.name}
+                onChange={(ev) => handleFormChange(ev.target.value, 'name')}
+                type="text"
+                inputId="name"
+                placeholder="Juan Manuel"
+                />
+            {!isPermited.name && <p className="error-msg">Name cannot contain special characters or be empty</p>}
+            
+            <FormInput 
+                labelText="Surname"
+                className="text-input"
+                value={driver.surname}
+                onChange={(ev) => handleFormChange(ev.target.value, 'surname')}
+                type="text"
+                inputId="surname"
+                placeholder="Fangio"
+                />
+            {!isPermited.surname && <p className="error-msg">Surname cannot contain special characters or be empty</p>}
+        
+            <FormInput 
+                labelText="Nationality"
+                className="text-input"
+                value={driver.nationality}
+                onChange={(ev) => handleFormChange(ev.target.value, 'nationality')}
+                type="text"
+                inputId="nationality"
+                placeholder="Argentina"
+                />
+            {!isPermited.nationality && <p className="error-msg">Nationality cannot contain special characters or be empty. It also has to be a country!</p>}
 
-            </div>
-            
-            <div className="form-section">
-                <label htmlFor="surname">Surname</label>
-                <input 
-                    autoComplete="off"
-                    className="text-input"
-                    value={driver.surname} onChange={(ev) => handleFormChange(ev.target.value, 'surname')}
-                    type="text" 
-                    id="surname" 
-                    placeholder="Fangio"
-                    />
-            </div>
-            
-            <div className="form-section">
-                <label htmlFor="nationality">Nationality</label>
-                <input
-                    autoComplete="off"
-                    className="text-input" 
-                    value={driver.nationality} onChange={(ev) => handleFormChange(ev.target.value, 'nationality')}
-                    type="text" 
-                    id="nationality" 
-                    placeholder="Argentina"
-                    />
-            </div>
-            
-            <div className="form-section">
-                <label htmlFor="birth">Date of Birth</label>
-                <input
-                    autoComplete="off"
-                    className="text-input" 
-                    value={driver.birth} onChange={(ev) => handleFormChange(ev.target.value, 'birth')}
-                    id="birth" 
-                    type="date"
-                    />
-            </div>
-            
-            <div className="form-section">
-                <label htmlFor="image">Image</label>
-                <input
-                    autoComplete="off"
-                    className="text-input" 
-                    value={driver.image} onChange={(ev) => handleFormChange(ev.target.value, 'image')}
-                    type="text" 
-                    id="image" 
-                    placeholder="https://sitio.com/imagen.jpg"
-                    />
-            </div>
-            
-            <div className="form-section">
-                <label htmlFor="description">Description</label>
-                <input
-                    autoComplete="off"
-                    className="text-input" 
-                    value={driver.description} onChange={(ev) => handleFormChange(ev.target.value, 'description')}
-                    type="text" 
-                    id="description" 
-                    placeholder="descripción"
-                    />
-            </div>
-            
-            <div className="form-section">
-                <label htmlFor="teams">Teams</label>
-                <input 
-                    autoComplete="off"
-                    className="text-input"
-                    value={driver.teams} onChange={(ev) => handleFormChange(ev.target.value, 'teams')}
-                    type="text" 
-                    id="teams" 
-                    placeholder="Ferrari, Williams, McLaren"
-                    />
-            </div>
 
-            <button className="send-input">Crear driver</button>
+            {
+                location == '/create' && (
+                    <>
+                        <FormInput 
+                            inputId="birth"
+                            labelText="Date of Birth"
+                            className="text-input"
+                            onChange={(ev) => handleFormChange(ev.target.value, 'birth')}
+                            type="date"
+                            value={driver.birth}
+                            />
+                        {!isPermited.birth && <p className="error-msg">Date of birth cannot be empty, in the future or less than 18 years ago</p>}
+                    </>
+                )
+            }
+           
+            <FormInput 
+                labelText="Image"
+                className="text-input"
+                value={driver.image}
+                onChange={(ev) => handleFormChange(ev.target.value, 'image')}
+                type="text"
+                inputId="image"
+                placeholder="https://sitio.com/imagen.jpg"
+                />
+            {!isPermited.image && <p className="error-msg">Image has to be a valid URL</p>}
+
+            <FormInput 
+                labelText="Description"
+                className="text-input"
+                value={driver.description}
+                onChange={(ev) => handleFormChange(ev.target.value, 'description')}
+                type="text"
+                inputId="description"
+                placeholder="This is a little description"
+                />
+            {!isPermited.description && <p className="error-msg">Description cannot be all caps, contain special characters or be empty</p>}            
+
+
+            <FormInput 
+                labelText="Teams"
+                className="text-input"
+                value={driver.teams}
+                onChange={(ev) => handleFormChange(ev.target.value, 'teams')}
+                type="text"
+                inputId="teams"
+                placeholder="Ferrari, Williams, McLaren, Lotus"
+                />
+            {!isPermited.teams && <p className="error-msg">Teams should be present in the API</p>}
+
+            <Button disabled={Object.values(isPermited).includes(false)}  text="Crear driver" />
         </form>
     )
 }

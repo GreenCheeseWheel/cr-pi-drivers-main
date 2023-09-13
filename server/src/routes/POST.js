@@ -1,11 +1,13 @@
 const postRouter = require('express').Router();
-const {postDriver, loginUser, logoutUser} = require('../controllers/postControllers');
+const {postDriver} = require('../controllers/POST/postDriver');
+const {loginUser} = require('../controllers/POST/loginUser');
+const {logoutUser} = require('../controllers/POST/logoutUser');
 
 postRouter.post('/drivers', (req, res) => {
     const {name, surname, description, image, nationality, birth, teams, userEmail} = req.body;
 
     postDriver(name, surname, description, image, nationality, birth, teams, userEmail)
-    .then(() => res.status(200).end())
+    .then((driver) => res.status(200).json({driver}))
     .catch(err => {
         console.log(err.message);
         res.status(500).json({error: err.message})
