@@ -173,7 +173,8 @@ export default function ShowDrivers({page, setPage, teams})
             <div id="driver-display">
             {
                 drivers.length && drivers.map((driver, index) =>  {
-
+                    
+                    console.log(driver)
                     if(index >= (page-1)*numDrivers && index < page*numDrivers)
                     {
                         return <DriverCard 
@@ -181,7 +182,7 @@ export default function ShowDrivers({page, setPage, teams})
                                     id={driver.id} 
                                     name={`${driver.name} ${driver.surname}`} 
                                     image={driver.image} 
-                                    teams={driver.teams ? driver.teams : driver["Teams"]} 
+                                    teams={driver.Teams ? driver.Teams : driver.teams} 
                                     />
                     }
                 })

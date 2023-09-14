@@ -1,5 +1,5 @@
 const {Op} = require('sequelize');
-const {User, Teams, Driver} = require('../../db');
+const {User, Team, Driver} = require('../../db');
 const {DEFAULT_IMAGE} = require('../resources/images');
 const axios = require('axios');
 
@@ -27,7 +27,7 @@ async function getAllDrivers(userEmail)
                     [Op.or]: drivers
                 },
             },
-            include: Teams ,
+            include: Team ,
             attributes: {exclude: ['description', 'nationality']}
         });
     }
@@ -45,7 +45,7 @@ async function getAllDrivers(userEmail)
                 surname: driver.name.surname,
                 image: driver.image.url.trim() != "" ? driver.image.url : DEFAULT_IMAGE,
                 birth: driver.dob,
-                teams: driver.teams
+                Teams: driver.teams
         })
     }
     

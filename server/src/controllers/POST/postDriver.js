@@ -1,4 +1,4 @@
-const {Driver, Teams, users_x_drivers, drivers_x_teams} = require('../../db');
+const {Driver, Team, users_x_drivers, drivers_x_teams} = require('../../db');
 
 
 async function postDriver(name, surname, description, image, nationality, birth, teams, userEmail)
@@ -19,7 +19,7 @@ async function postDriver(name, surname, description, image, nationality, birth,
         
         for(const team of teams_arr)
         {
-            const [teamFromDb, created] = await Teams.findOrCreate({
+            const [teamFromDb, created] = await Team.findOrCreate({
                 where: {
                     name: team.name
                 }
@@ -28,12 +28,15 @@ async function postDriver(name, surname, description, image, nationality, birth,
             teams_resp.push(teamFromDb);
         }
 
-    
+        
+        await driver.addTeams(teams_resp);
+
+        /*
         for(let i = 0; i < teams_resp.length; i++)
         {
             await drivers_x_teams.create({DriverId: driver.id, TeamId: teams_resp[i].id });
         }
-
+        */
         await users_x_drivers.create({DriverId: driver.id, UserEmail: userEmail});
 
         return {...driver, Teams: teams};

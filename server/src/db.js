@@ -28,11 +28,11 @@ let entries = Object.entries(sequelize.models);
 let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].slice(1), entry[1]]);
 sequelize.models = Object.fromEntries(capsEntries);
 
-const { Driver, Teams, User} = sequelize.models;
+const { Driver, Team, User} = sequelize.models;
 
 
-Driver.belongsToMany(Teams, {through: 'drivers_x_teams'});
-Teams.belongsToMany(Driver, {through: 'drivers_x_teams'});
+Driver.belongsToMany(Team, {through: 'drivers_x_teams'});
+Team.belongsToMany(Driver, {through: 'drivers_x_teams'});
 
 User.belongsToMany(Driver, {through: 'users_x_drivers'});
 Driver.belongsToMany(User, {through: 'users_x_drivers'});

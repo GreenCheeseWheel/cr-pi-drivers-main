@@ -40,20 +40,13 @@ module.exports = (sequelize) => {
         let today = new Date();
         let driverBirth = new Date(driver.birth);
         
+        /*
         if(driverBirth > today) throw Error('Input birth date is in the future');
 
         today.setFullYear(today.getFullYear - 18);
 
         if(driverBirth > today) throw Error('Driver is too young');
-
-        try
-        {
-          new URL(driver.image)
-        }
-        catch(err)
-        {
-          throw Error('Image provided is not a valid URL');
-        }
+        */
       },
 
     }

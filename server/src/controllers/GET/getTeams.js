@@ -1,11 +1,12 @@
-const {Teams} = require('../../db');
+const {Team} = require('../../db');
+const axios = require('axios');
 
 async function getTeams()
 {
 
     try
     {
-        let teams_array = await Teams.findAll();
+        let teams_array = await Team.findAll();
 
         
         if(!teams_array.length)
@@ -26,7 +27,7 @@ async function getTeams()
             
             drivers_resp = drivers_resp.map(name => {return {name}});
             
-            await Teams.bulkCreate(drivers_resp);
+            await Team.bulkCreate(drivers_resp);
             
             teams_array = drivers_resp;
         }

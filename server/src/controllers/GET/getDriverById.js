@@ -1,4 +1,4 @@
-const {Driver, Teams} = require('../../db');
+const {Driver, Team} = require('../../db');
 const {DEFAULT_IMAGE} = require('../resources/images');
 const axios = require('axios');
 
@@ -9,7 +9,7 @@ async function getDriverById(id)
     {
         
         let driver = await Driver.findByPk(id, {
-            include: Teams,
+            include: Team,
         });
 
         if(driver == null) throw Error("No such driver in the database");

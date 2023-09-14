@@ -1,15 +1,17 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom"
 import "./index.css"
 import axios from "axios";
 import Button from "../Button/Button";
+import { getAllDrivers } from "../../redux/actions";
 
 
 export default function DriverDetail()
 {
     const {id} = useParams();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const [driver, setDriver] = React.useState({
         id: id, 
@@ -35,7 +37,11 @@ export default function DriverDetail()
     const handleDelete = () => {
         axios
             .delete(`http://localhost:3001/driver/${driver.id}`)
-            .then(() => navigate('/home'))
+            .then(() => {
+                dispatch(getAllDrivers());
+                navigate('/home');
+                
+            })
             .catch(err => alert(err.message));
     };
 

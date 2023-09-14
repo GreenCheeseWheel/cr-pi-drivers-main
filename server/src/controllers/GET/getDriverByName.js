@@ -1,5 +1,5 @@
 const {Op} = require('sequelize');
-const {Driver} = require('../../db');
+const {Driver, Team} = require('../../db');
 
 
 async function getDriverByName(name)
@@ -12,7 +12,7 @@ async function getDriverByName(name)
                     [Op.iLike]: name,
                 }
             },
-            include: Teams,
+            include: Team,
         });
         
         return driver.slice(0, 16);
